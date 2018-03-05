@@ -26,10 +26,11 @@ public class GiftLogo extends AbstractEntity<Integer> {
 	private Integer id;
 
 	@Lob
+	@Attribute(image = true, fileNameProperty = "logo.fileName")
 	private byte[] image;
 
 	// hide in table to prevent fetch issues
-	@Attribute(showInTable = VisibilityType.HIDE)
+	@Attribute(readOnly = true, showInTable = VisibilityType.HIDE)
 	private String fileName;
 
 	@Override

@@ -12,4 +12,6 @@ public final class Views {
 	public static final String GIFT_VIEW = "giftView";
 
 	public static final String DELIVERY_VIEW = "deliveryView";
+	
+	public static final String ORGANIZATION_DETAIL_VIEW = "organizationDetailView";
 }

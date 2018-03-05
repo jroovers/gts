@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mysema.query.types.path.EntityPathBase;
 import com.ocs.dynamo.dao.impl.BaseDaoImpl;
+import com.ocs.dynamo.dao.query.FetchJoinInformation;
 import com.ocs.gts.domain.Organization;
 import com.ocs.gts.domain.QOrganization;
 import com.ocs.gts.domain.dao.OrganizationDao;
@@ -22,5 +23,9 @@ public class OrganizationDaoImpl extends BaseDaoImpl<Integer, Organization> impl
 	protected EntityPathBase<Organization> getDslRoot() {
 		return qOrganization;
 	}
-
+	
+	@Override
+	protected FetchJoinInformation[] getFetchJoins() {
+		return new FetchJoinInformation[] { new FetchJoinInformation("countryOfOrigin") };
+	}
 }

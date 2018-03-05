@@ -16,6 +16,7 @@ import com.ocs.dynamo.ui.component.BaseBanner;
 import com.ocs.dynamo.ui.component.DefaultVerticalLayout;
 import com.ocs.dynamo.ui.component.ErrorView;
 import com.ocs.dynamo.ui.menu.MenuService;
+import com.ocs.gts.domain.Organization;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
@@ -85,6 +86,8 @@ public class GtsUI extends BaseUI {
 	@Autowired
 	private SpringViewProvider viewProvider;
 
+	private Organization selectedOrganization;
+
 	/**
 	 * Main method - sets up the application
 	 */
@@ -115,8 +118,9 @@ public class GtsUI extends BaseUI {
 		center.addComponent(titleLayout);
 
 		// first line: application title
-		Label titleLabel = new Label("<b>" + messageService.getMessage("gts.application.name") + " v" + versionNumber
-		        + "</b>", ContentMode.HTML);
+		Label titleLabel = new Label(
+				"<b>" + messageService.getMessage("gts.application.name") + " v" + versionNumber + "</b>",
+				ContentMode.HTML);
 		titleLayout.addComponent(titleLabel);
 
 		String userName = principal.getName();
@@ -143,4 +147,14 @@ public class GtsUI extends BaseUI {
 		main.addComponent(viewPanel);
 
 	}
+
+	public Organization getSelectedOrganization() {
+		return selectedOrganization;
+	}
+
+	public void setSelectedOrganization(Organization selectedOrganization) {
+		this.selectedOrganization = selectedOrganization;
+	}
+	
+	
 }

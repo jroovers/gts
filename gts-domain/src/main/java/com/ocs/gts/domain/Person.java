@@ -1,8 +1,12 @@
 package com.ocs.gts.domain;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -18,9 +22,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.ocs.dynamo.domain.AbstractEntity;
+import com.ocs.dynamo.domain.model.AttributeSelectMode;
+import com.ocs.dynamo.domain.model.VisibilityType;
+import com.ocs.dynamo.domain.model.annotation.Attribute;
+import com.ocs.dynamo.domain.model.annotation.AttributeOrder;
+import com.ocs.dynamo.domain.model.annotation.Model;
 
 @Entity
 @Table(name = "person")
+@Model(displayProperty = "fullName", sortOrder="lastName")
+@AttributeOrder(attributeNames = {"firstName","nickName","lastName","organization","born","died"})
 public class Person extends AbstractEntity<Integer> {
 
 	private static final long serialVersionUID = -3436199710873943375L;
@@ -53,11 +64,13 @@ public class Person extends AbstractEntity<Integer> {
 	@NotNull
 	@Size(max = 255)
 	@Column(name = "nickname")
+	@Attribute(displayName = "Nickname")
 	private String nickName;
 
 	@NotNull
 	@JoinColumn(name = "organization")
 	@ManyToOne(fetch = FetchType.LAZY)
+	@Attribute(showInTable = VisibilityType.SHOW, searchable = true, selectMode = AttributeSelectMode.LOOKUP, complexEditable = true)
 	private Organization organization;
 
 	@Temporal(TemporalType.DATE)
@@ -65,6 +78,29 @@ public class Person extends AbstractEntity<Integer> {
 
 	@Temporal(TemporalType.DATE)
 	private Date died;
+	
+	@ElementCollection
+	@CollectionTable(name = "person_lucky_numbers")
+	@Column(name = "lucky_number")
+	@Attribute(complexEditable = true, minValue=1L, maxValue = 12L)
+	private Set<Integer> luckyNumbers = new HashSet<>();
+	
+	@Attribute(readOnly = true, main = true)
+	public String getFullName() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(firstName);
+		builder.append(" '" + nickName + "' ");
+		builder.append(lastName);
+		return builder.toString();
+	}
+
+	public Set<Integer> getLuckyNumbers() {
+		return luckyNumbers;
+	}
+
+	public void setLuckyNumbers(Set<Integer> luckyNumbers) {
+		this.luckyNumbers = luckyNumbers;
+	}
 
 	public String getFirstName() {
 		return firstName;
